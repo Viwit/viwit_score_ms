@@ -14,7 +14,7 @@ class Entity {
     return db
       .collection('entities')
       .insertOne(this)
-      .then((res) => console.log('entity inserted'))
+      .then(console.log('entity inserted'))
       .catch((err) => console.log(err));
   }
 
@@ -24,16 +24,15 @@ class Entity {
       .collection('entities')
       .findOne({ _id: id, kind: kind })
       .then((entity) => {
-        console.log('entity fetched');
-        console.log(entity);
+        console.log('entity fetch');
         return entity;
       })
       .catch((err) => console.log(err));
   }
 
-  static insertScore(entity, score) {
+  static async insertScore(entity, score) {
     const db = getDb();
-    entity.scores.push(score);
+    await entity.scores.push(score);
     const avg = this.calcAvg(entity.scores);
     return db
       .collection('entities')
