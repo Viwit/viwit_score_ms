@@ -4,20 +4,26 @@ exports.getScore = (req, res, next) => {
   res.status(200).json({ scores: [{ score1: 5, score2: 1 }] });
 };
 
-exports.putScore = (req, res, next) => {
+exports.putScore = (req, response, next) => {
   const id = req.body.id;
   const kind = req.body.kind;
   const score = req.body.score;
-  Entity.find(id)
+  Entity.findById(id)
     .then((entity) => {
       if (entity) {
-        console.log('EXISTS IN THE DATABASE');
+        Entity.insertScore(entity, score)
+          .then(
+            response.status(201).json({
+              message: 'Score inserted successfully!'
+            })
+          )
+          .catch((err) => console.log(err));
       } else {
-        const entity = new Entity(id, kind);
+        const entity = new Entity(id, kind, score);
         entity
           .save()
           .then(
-            res.status(201).json({
+            response.status(201).json({
               message: 'Entity registered successfully!',
               id: id,
               kind: kind,
