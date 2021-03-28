@@ -18,20 +18,11 @@ class Entity {
       .catch((err) => console.log(err));
   }
 
-  /*  static pushScore(id, scores) {
+  static find(id, kind) {
     const db = getDb();
     return db
       .collection('entities')
-      .updateOne({ _id: id }, { scores: scores })
-      .then((res) => console.log('entity inserted'))
-      .catch((err) => console.log(err));
-  } */
-
-  static findById(id) {
-    const db = getDb();
-    return db
-      .collection('entities')
-      .findOne({ _id: id })
+      .findOne({ _id: id, kind: kind })
       .then((entity) => {
         console.log('entity fetched');
         console.log(entity);
@@ -43,13 +34,26 @@ class Entity {
   static insertScore(entity, score) {
     const db = getDb();
     entity.scores.push(score);
+    const avg = this.calcAvg(entity.scores);
     return db
       .collection('entities')
-      .updateOne({ _id: entity._id }, { $set: { scores: entity.scores } })
+      .updateOne(
+        { _id: entity._id },
+        { $set: { score: avg, scores: entity.scores } }
+      )
       .then((res) => {
         console.log('entity updated');
       })
       .catch((err) => console.log(err));
+  }
+
+  static calcAvg(scores) {
+    let sum = 0;
+    scores.forEach((element) => {
+      sum += element;
+    });
+    const avg = sum / scores.length;
+    return avg;
   }
 }
 

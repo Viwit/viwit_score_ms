@@ -8,7 +8,7 @@ exports.putScore = (req, response, next) => {
   const id = req.body.id;
   const kind = req.body.kind;
   const score = req.body.score;
-  Entity.findById(id)
+  Entity.find(id,kind)
     .then((entity) => {
       if (entity) {
         Entity.insertScore(entity, score)
