@@ -6,12 +6,12 @@ const scoreRoutes = require('./routes/score');
 
 const app = express();
 
-app.use(express.json()); //bodyParser is deprecated, included inside express
+app.use(express.json());
 
 app.use(scoreRoutes);
 
 mongoConnect(() => {
-  app.listen(8080);
+  app.listen(8000);
 });
 
 

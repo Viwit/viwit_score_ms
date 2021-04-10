@@ -1,13 +1,19 @@
 const Entity = require('../models/entity');
-
+// GET doesn't support body through axios
 exports.getScore = (req, res, next) => {
-  const id = req.body.id;
-  const kind = req.body.kind;
+  const id = parseInt(req.query.id);
+  const kind = parseInt(req.query.kind);
+
   Entity.find(id, kind)
     .then((entity) => {
       res.status(200).json({ id: entity._id, score: entity.score });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    });
 };
 
 exports.putScore = (req, response, next) => {
@@ -29,7 +35,11 @@ exports.putScore = (req, response, next) => {
                 message: 'Score inserted successfully!',
               })
             )
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              response.status(400).json({
+                message: err.message,
+              });
+            });
         } else {
           const entity = new Entity(id, kind, score);
           entity
@@ -42,9 +52,17 @@ exports.putScore = (req, response, next) => {
                 score: score,
               })
             )
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              response.status(400).json({
+                message: err.message,
+              });
+            });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        response.status(400).json({
+          message: err.message,
+        });
+      });
   }
 };
