@@ -6,6 +6,7 @@ const scoreController = require('../controllers/score');
 
 // GET /score
 router.get('/score', scoreController.getScore);
+
 // PUT /score
 router.put('/score', scoreController.putScore);
 
