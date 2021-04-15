@@ -1,0 +1,69 @@
+openapi: 3.0.1
+info:
+  description: "This documentation details the services available in this API.  To use the API, the following commands must be executed: `cd score`, running `docker build -t viwit-score .` ` docker run -p 8000:8000 -d viwit-score`"
+  title: API - Viwit Score
+  version: v1
+servers:
+  - url: http://localhost:8000
+    description: Production server
+  - url: http://localhost:8000
+    description: Sandbox server
+paths:
+  "/score":
+    get:
+      tags:
+      - Score
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+      - Score
+      parameters:
+      - name: id
+        in: body
+        required: true
+        schema:
+          type: int
+      - name: kind
+        in: body
+        required: true
+        schema:
+          type: int
+      - name: score
+        in: body
+        required: true
+        schema:
+          type: int
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/score/"
+          text/json:
+            schema:
+              "$ref": "#/components/score/"
+          application/*+json:
+            schema:
+              "$ref": "#/components/score/"
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    Entity:
+      type: object
+      properties:
+        _id:
+          type: int
+          nullable: false
+        kind:
+          type: int
+          nullable: false
+        score:
+          type: int
+          nullable: false
+        scores:
+          type: array
+          nullable: false
+      additionalProperties: false
