@@ -8,13 +8,26 @@ class Entity {
     this.scores = [];
     this.scores.push(score);
   }
-
+  
   save() {
     const db = getDb();
     return db
       .collection('entities')
       .insertOne(this)
       .then(console.log('entity inserted'))
+      .catch((err) => console.log(err));
+  }
+
+  static fetchAll() {
+    const db = getDb();
+    return db
+      .collection('entities')
+      .find({})
+      .toArray()
+      .then((entities) => {
+        console.log('entities fetch');
+        return entities;
+      })
       .catch((err) => console.log(err));
   }
 
@@ -54,6 +67,7 @@ class Entity {
     const avg = sum / scores.length;
     return avg;
   }
+  
 }
 
 module.exports = Entity;

@@ -1,4 +1,17 @@
 const Entity = require('../models/entity');
+
+exports.getAllScores = (req, res, next) => {
+  Entity.fetchAll()
+    .then((entities) => {
+      res.status(200).json({ entities });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        message: err.message,
+      });
+    });
+};
+
 // GET doesn't support body through axios
 exports.getScore = (req, res, next) => {
   const id = parseInt(req.query.id);
